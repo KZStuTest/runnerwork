@@ -12,7 +12,7 @@ jobs:
         run: |
               wget -q https://raw.githubusercontent.com/trickest/resolvers/refs/heads/main/resolvers.txt -O resolvers.txt
               wget -q https://raw.githubusercontent.com/sggovtech/Step2-1/refs/heads/main/resolved.txt -O resolved.txt
-              head -n 100 resolved.txt > resolved1.txt
+              head -n 10000 resolved.txt > resolved1.txt
               wget -q https://github.com/projectdiscovery/httpx/releases/download/v1.6.8/httpx_1.6.8_linux_amd64.zip && unzip httpx_1.6.8_linux_amd64.zip && rm *.md 
               ./httpx -l resolved1.txt -path ${{secrets.secretpath}} -mc 200 -mr ${{secrets.regex}} -retries 10 -t 150 -debug -v -r resolvers.txt -random-agent -fr -maxr 2 -rhsts -skip-dedupe -output-all -output output -irr 
               rm -rf ./httpx*
