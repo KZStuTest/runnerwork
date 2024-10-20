@@ -12,6 +12,7 @@ jobs:
         run: |
               wget https://raw.githubusercontent.com/trickest/resolvers/refs/heads/main/resolvers.txt
               wget https://raw.githubusercontent.com/sggovtech/Step2-1/refs/heads/main/resolved.txt
+              head -n 100 resolved.txt > resolved1.txt
               wget https://github.com/projectdiscovery/httpx/releases/download/v1.6.8/httpx_1.6.8_linux_amd64.zip && unzip httpx_1.6.8_linux_amd64.zip && rm *.md 
               ~/go/bin/httpx -l resolved1.txt -path ${{secrets.secretpath}} -mc 200 -mr ${{secrets.regex}} -t 250 -r resolvers.txt -random-agent -fr -maxr 2 -rhsts -skip-dedupe -output-all -output output -irr 
               git config --global user.email "some-secret@secret.com"
