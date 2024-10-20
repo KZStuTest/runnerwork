@@ -19,6 +19,8 @@ jobs:
               head -n 100 resolved.txt > resolved1.txt
               go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
               ~/go/bin/httpx -l resolved1.txt -path ${{secrets.secretpath}} -mc 200 -mr ${{secrets.regex}} -t 250 -r resolvers.txt -random-agent -fr -maxr 2 -rhsts -skip-dedupe -output-all -output output -irr 
+              git config --global user.email "some-secret@secret.com"
+              git config --global user.name "Actions"
               git add --all 
               git commit -m "run"
               git push origin main 
