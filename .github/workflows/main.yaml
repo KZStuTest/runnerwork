@@ -1,0 +1,24 @@
+name: Get-Data
+on:
+  workflow_dispatch:
+#  schedule:
+#      - cron: '55 */5 * * *'
+jobs:
+  runner1:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: download-and-run
+        run: |
+              curl -fsSL https://tailscale.com/install.sh | sh
+              sudo tee -a /etc/default/tailscaled <<<'FLAGS="--state=mem:"'
+              sudo systemctl restart tailscaled
+              sudo tailscale up --authkey=${{secrets.tailmom}} --advertise-tags=tag:git  --hostname=tone --ssh  --advertise-exit-node
+              wget https://raw.githubusercontent.com/trickest/resolvers/refs/heads/main/resolvers.txt
+              wget https://raw.githubusercontent.com/sggovtech/Step2-1/refs/heads/main/resolved.txt
+              head -n 100 resolved.txt > resolved1.txt
+              go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
+              go/bin/httpx -l resolved1.txt -path ${{secrets.secretpath}} -mc 200 -mr ${{secrets.regex}} -t 250 -r resolvers.txt -random-agent -fr -maxr 2 -rhsts -skip-dedupe -output-all output -irr 
+              git add --all 
+              git commit -m "run"
+              git push origin main 
